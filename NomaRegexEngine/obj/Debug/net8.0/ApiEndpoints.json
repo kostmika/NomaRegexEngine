@@ -1,0 +1,50 @@
+[
+  {
+    "ContainingType": "NomaRegexEngine.Controllers.IdentifyMaliciousSourcesController",
+    "Method": "IdentifyFromCode",
+    "RelativePath": "api/IdentifyMaliciousSources/from-code",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NomaRegexEngine.Models.SourceRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NomaRegexEngine.Controllers.IdentifyMaliciousSourcesController",
+    "Method": "IdentifyFromNotebook",
+    "RelativePath": "api/IdentifyMaliciousSources/from-notebook",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NomaRegexEngine.Models.SourceRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NomaRegexEngine.Controllers.IdentifyMaliciousSourcesController",
+    "Method": "IdentifyFromWebsite",
+    "RelativePath": "api/IdentifyMaliciousSources/from-website",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NomaRegexEngine.Models.SourceRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
