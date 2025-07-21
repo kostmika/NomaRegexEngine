@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Mvc;
 using NomaRegexEngine.Models;
 using NomaRegexEngine.Services;
 using NomaRegexEngine.Utils;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace NomaRegexEngine.Controllers
 {
@@ -20,8 +18,13 @@ namespace NomaRegexEngine.Controllers
         [HttpPost("from-website")]
         public async Task<IActionResult> IdentifyFromWebsite([FromBody] SourceRequest request)
         {
+            if (request.SourceType != SourceType.Http)
+            {
+                return BadRequest("Website source must be of type 'Http'.");
+            }
+
             string html = await _httpClient.GetStringAsync(request.Source);
-            List<string> matches = _regexService.ApplyRegex(html, request.RegexPattern);
+            List<string> matches = _regexService.ApplyRegex(html, request.RegexPatterns);
 
             return Ok(matches);
         }
@@ -29,18 +32,14 @@ namespace NomaRegexEngine.Controllers
         [HttpPost("from-code")]
         public async Task<IActionResult> IdentifyFromCode([FromBody] SourceRequest request)
         {
-            string code;
-
-            if (request.Source.StartsWith("http"))
+            string code = request.SourceType switch
             {
-                code = await _httpClient.GetStringAsync(request.Source);
-            }
-            else
-            {
-                code = System.IO.File.ReadAllText(request.Source);
-            }
+                SourceType.Http => await _httpClient.GetStringAsync(request.Source),
+                SourceType.FileSystem => await System.IO.File.ReadAllTextAsync(request.Source),
+                _ => throw new ArgumentException("Unknown SourceType")
+            };
 
-            List<string> matches = _regexService.ApplyRegex(code, request.RegexPattern);
+            List<string> matches = _regexService.ApplyRegex(code, request.RegexPatterns);
 
             return Ok(matches);
         }
@@ -48,24 +47,25 @@ namespace NomaRegexEngine.Controllers
         [HttpPost("from-notebook")]
         public async Task<IActionResult> IdentifyFromNotebook([FromBody] SourceRequest request)
         {
-            string json;
-
-            if (request.Source.StartsWith("http"))
+            string json = request.SourceType switch
             {
-                json = await _httpClient.GetStringAsync(request.Source);
-            }
-            else
-            {
-                json = System.IO.File.ReadAllText(request.Source);
-            }
+                SourceType.Http => await _httpClient.GetStringAsync(request.Source),
+                SourceType.FileSystem => await System.IO.File.ReadAllTextAsync(request.Source),
+                _ => throw new ArgumentException("Unknown SourceType")
+            };
 
             List<string> sourceCellsText = NotebookParser.ExtractSourceCellsText(json);
-            List<string> matches = [];
+            ConcurrentBag<string> matches = [];
 
-            foreach (string sourceCell in sourceCellsText)
+            Parallel.ForEach(sourceCellsText, sourceCell =>
             {
-                matches = (List<string>)matches.Concat(_regexService.ApplyRegex(sourceCell, request.RegexPattern));
-            }
+                List<string> result = _regexService.ApplyRegex(sourceCell, request.RegexPatterns);
+                
+                foreach (string match in result)
+                {
+                    matches.Add(match);
+                }
+            });
 
             return Ok(matches);
         }

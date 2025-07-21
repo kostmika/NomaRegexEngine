@@ -103,7 +103,7 @@
     "schemas": {
       "SourceRequest": {
         "required": [
-          "regexPattern",
+          "regexPatterns",
           "source"
         ],
         "type": "object",
@@ -112,12 +112,24 @@
             "minLength": 1,
             "type": "string"
           },
-          "regexPattern": {
-            "minLength": 1,
-            "type": "string"
+          "regexPatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceType": {
+            "$ref": "#/components/schemas/SourceType"
           }
         },
         "additionalProperties": false
+      },
+      "SourceType": {
+        "enum": [
+          "Http",
+          "FileSystem"
+        ],
+        "type": "string"
       }
     }
   }

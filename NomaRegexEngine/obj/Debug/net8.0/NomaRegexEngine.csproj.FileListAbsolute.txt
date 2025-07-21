@@ -1,5 +1,3 @@
-C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\bin\Debug\net8.0\appsettings.Development.json
-C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\bin\Debug\net8.0\appsettings.json
 C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\bin\Debug\net8.0\NomaRegexEngine.staticwebassets.endpoints.json
 C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\bin\Debug\net8.0\NomaRegexEngine.exe
 C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\bin\Debug\net8.0\NomaRegexEngine.deps.json
@@ -34,3 +32,4 @@ C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\obj\Debug\net8.0\refi
 C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\obj\Debug\net8.0\NomaRegexEngine.pdb
 C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\obj\Debug\net8.0\NomaRegexEngine.genruntimeconfig.cache
 C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\obj\Debug\net8.0\ref\NomaRegexEngine.dll
+C:\Users\Mika\source\repos\NomaRegexEngine\NomaRegexEngine\obj\Debug\net8.0\NomaRegexEngine.sourcelink.json

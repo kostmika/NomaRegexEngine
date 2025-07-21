@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NomaRegexEngine")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91711e81e30efbcebc0a94e87c1b47e615a14a1c")]
 [assembly: System.Reflection.AssemblyProductAttribute("NomaRegexEngine")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NomaRegexEngine")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
