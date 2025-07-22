@@ -8,10 +8,10 @@ namespace NomaRegexEngine.Utils
 {
     public static class NotebookParser
     {
-        public static List<string> ExtractSourceCellsText(string json)
+        public static List<string> ExtractSourceCellsText(Stream jsonStream)
         {
             List<string> results = [];
-            JsonDocument doc = JsonDocument.Parse(json);
+            JsonDocument doc = JsonDocument.Parse(jsonStream);
 
             if (doc.RootElement.TryGetProperty("cells", out JsonElement cells))
             {

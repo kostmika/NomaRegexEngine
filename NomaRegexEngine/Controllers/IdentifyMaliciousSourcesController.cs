@@ -23,8 +23,8 @@ namespace NomaRegexEngine.Controllers
                 return BadRequest("Website source must be of type 'Http'.");
             }
 
-            string html = await _httpClient.GetStringAsync(request.Source);
-            List<string> matches = _regexService.ApplyRegex(html, request.RegexPatterns);
+            string htmlContent = await _httpClient.GetStringAsync(request.Source);
+            List<string> matches = _regexService.ApplyRegex(htmlContent, request.RegexPatterns);
 
             return Ok(matches);
         }
@@ -32,14 +32,14 @@ namespace NomaRegexEngine.Controllers
         [HttpPost("from-code")]
         public async Task<IActionResult> IdentifyFromCode([FromBody] SourceRequest request)
         {
-            string code = request.SourceType switch
+            string codeContent = request.SourceType switch
             {
                 SourceType.Http => await _httpClient.GetStringAsync(request.Source),
                 SourceType.FileSystem => await System.IO.File.ReadAllTextAsync(request.Source),
                 _ => throw new ArgumentException("Unknown SourceType")
             };
 
-            List<string> matches = _regexService.ApplyRegex(code, request.RegexPatterns);
+            List<string> matches = _regexService.ApplyRegex(codeContent, request.RegexPatterns);
 
             return Ok(matches);
         }
@@ -47,20 +47,20 @@ namespace NomaRegexEngine.Controllers
         [HttpPost("from-notebook")]
         public async Task<IActionResult> IdentifyFromNotebook([FromBody] SourceRequest request)
         {
-            string json = request.SourceType switch
+            Stream notebookJson = request.SourceType switch
             {
-                SourceType.Http => await _httpClient.GetStringAsync(request.Source),
-                SourceType.FileSystem => await System.IO.File.ReadAllTextAsync(request.Source),
+                SourceType.Http => await _httpClient.GetStreamAsync(request.Source),
+                SourceType.FileSystem => System.IO.File.OpenRead(request.Source),
                 _ => throw new ArgumentException("Unknown SourceType")
             };
 
-            List<string> sourceCellsText = NotebookParser.ExtractSourceCellsText(json);
+            List<string> sourceCellsContent = NotebookParser.ExtractSourceCellsText(notebookJson);
             ConcurrentBag<string> matches = [];
 
-            Parallel.ForEach(sourceCellsText, sourceCell =>
+            Parallel.ForEach(sourceCellsContent, sourceCell =>
             {
                 List<string> result = _regexService.ApplyRegex(sourceCell, request.RegexPatterns);
-                
+
                 foreach (string match in result)
                 {
                     matches.Add(match);
